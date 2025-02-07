@@ -2,6 +2,7 @@
 
 namespace Ipunkt\LaravelAnalytics\Providers;
 
+use Exception;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
 use Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
@@ -9,6 +10,7 @@ use Ipunkt\LaravelAnalytics\Data\Campaign;
 use Ipunkt\LaravelAnalytics\Data\Event;
 use Ipunkt\LaravelAnalytics\Data\Renderer\CampaignRenderer;
 use Ipunkt\LaravelAnalytics\TrackingBag;
+use JsonException;
 
 /**
  * Class GoogleAnalytics
@@ -20,114 +22,114 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     /**
      * tracking id
      *
-     * @var string
+     * @var string|null
      */
-    private $trackingId;
+    private ?string $trackingId;
 
     /**
      * optimize id
      *
      * @var string
      */
-    private $optimizeId;
+    private string $optimizeId;
 
     /**
      * tracking domain
      *
      * @var string
      */
-    private $trackingDomain;
+    private string $trackingDomain;
 
     /**
      * tracker name
      *
      * @var string
      */
-    private $trackerName;
+    private string $trackerName;
 
     /**
      * display features plugin enabled or disabled
      *
      * @var bool
      */
-    private $displayFeatures = false;
+    private bool $displayFeatures;
 
     /**
      * ecommerce tracking plugin enabled or disabled
      *
      * @var bool
      */
-    private $ecommerceTracking = false;
+    private bool $ecommerceTracking = false;
 
     /**
      * anonymize users ip
      *
      * @var bool
      */
-    private $anonymizeIp = false;
+    private bool $anonymizeIp;
 
     /**
      * auto tracking the page view
      *
      * @var bool
      */
-    private $autoTrack = false;
+    private bool $autoTrack;
 
     /**
      * debug mode
      *
      * @var bool
      */
-    private $debug = false;
+    private bool $debug;
 
     /**
      * for event tracking it can mark track as non-interactive so the bounce-rate calculation ignores that tracking
      *
      * @var bool
      */
-    private $nonInteraction = false;
+    private bool $nonInteraction = false;
 
     /**
      * session tracking bag
      *
      * @var TrackingBag
      */
-    private $trackingBag;
+    private TrackingBag $trackingBag;
 
     /**
      * use https for the tracking measurement url
      *
      * @var bool
      */
-    private $secureTrackingUrl = true;
+    private bool $secureTrackingUrl = true;
 
     /**
      * a user id for tracking
      *
      * @var string|null
      */
-    private $userId = null;
+    private ?string $userId = null;
 
     /**
      * a campaign for tracking
      *
-     * @var Campaign
+     * @var Campaign|null
      */
-    private $campaign = null;
+    private ?Campaign $campaign = null;
 
     /**
      * should the script block be rendered?
      *
      * @var bool
      */
-    private $renderScriptBlock = true;
+    private bool $renderScriptBlock = true;
 
     /**
      * Content Security Nonce
      *
      * @var null
      */
-    private $cspNonce = null;
+    private mixed $cspNonce = null;
 
     /**
      * setting options via constructor
@@ -155,32 +157,32 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     }
 
     /**
-     * track an page view
+     * track a page view
      *
-     * @param null|string $page
-     * @param null|string $title
-     * @param null|string $hittype
+     * @param string|null $page
+     * @param string|null $title
+     * @param string|null $hittype
      *
      * @return void
      */
-    public function trackPage($page = null, $title = null, $hittype = null)
+    public function trackPage(?string $page, ?string $title, ?string $hittype): void
     {
         $allowedHitTypes = ['pageview', 'appview', 'event', 'transaction', 'item', 'social', 'exception', 'timing'];
         if ($hittype === null) {
             $hittype = $allowedHitTypes[0];
         }
 
-        if (!in_array($hittype, $allowedHitTypes)) {
+        if (!in_array($hittype, $allowedHitTypes, true)) {
             return;
         }
 
         $trackingCode = "ga('send', 'pageview');";
 
         if ($page !== null || $title !== null || $hittype !== null) {
-            $page = ($page === null) ? "window.location.protocol + '//' + window.location.hostname + window.location.pathname + window.location.search" : "'{$page}'";
-            $title = ($title === null) ? "document.title" : "'{$title}'";
+            $page = ($page === null) ? "window.location.protocol + '//' + window.location.hostname + window.location.pathname + window.location.search" : "'$page'";
+            $title = ($title === null) ? "document.title" : "'$title'";
 
-            $trackingCode = "ga('send', {'hitType': '{$hittype}', 'page': {$page}, 'title': {$title}});";
+            $trackingCode = "ga('send', {'hitType': '$hittype', 'page': $page, 'title': $title});";
         }
 
         $this->trackingBag->add($trackingCode);
@@ -191,20 +193,20 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @param string $category
      * @param string $action
-     * @param null|string $label
-     * @param null|int $value
+     * @param string|null $label
+     * @param int|null $value
      */
-    public function trackEvent($category, $action, $label = null, $value = null)
+    public function trackEvent(string $category, string $action, ?string $label, ?int $value): void
     {
         $command = '';
         if ($label !== null) {
-            $command .= ", '{$label}'";
-            if ($value !== null && is_numeric($value)) {
-                $command .= ", {$value}";
+            $command .= ", '$label'";
+            if (is_numeric($value)) {
+                $command .= ", $value";
             }
         }
 
-        $trackingCode = "ga('send', 'event', '{$category}', '{$action}'$command);";
+        $trackingCode = "ga('send', 'event', '$category', '$action'$command);";
 
         $this->trackingBag->add($trackingCode);
     }
@@ -213,22 +215,25 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      * ecommerce tracking - add transaction
      *
      * @param string $id
-     * @param null|string $affiliation
-     * @param null|float $revenue
-     * @param null|float $shipping
-     * @param null|float $tax
-     * @param null|string $currency
+     * @param string|null $affiliation
+     * @param float|null $revenue
+     * @param float|null $shipping
+     * @param float|null $tax
+     * @param string|null $currency
      *
      * @return AnalyticsProviderInterface
+     * @throws JsonException
+     * @throws JsonException
      */
     public function ecommerceAddTransaction(
-        $id,
-        $affiliation = null,
-        $revenue = null,
-        $shipping = null,
-        $tax = null,
-        $currency = null
-    ) {
+        string $id,
+        string $affiliation = null,
+        float  $revenue = null,
+        float  $shipping = null,
+        float  $tax = null,
+        string $currency = null
+    ): AnalyticsProviderInterface
+    {
         // Call to enable ecommerce tracking automatically
         $this->enableEcommerceTracking();
 
@@ -254,8 +259,8 @@ class GoogleAnalytics implements AnalyticsProviderInterface
             $parameters['currency'] = $currency;
         }
 
-        $jsonParameters = json_encode($parameters);
-        $trackingCode = "ga('ecommerce:addTransaction', {$jsonParameters});";
+        $jsonParameters = json_encode($parameters, JSON_THROW_ON_ERROR);
+        $trackingCode = "ga('ecommerce:addTransaction', $jsonParameters);";
 
         $this->trackingBag->add($trackingCode);
 
@@ -267,23 +272,26 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @param string $id
      * @param string $name
-     * @param null|string $sku
-     * @param null|string $category
-     * @param null|float $price
-     * @param null|int $quantity
-     * @param null|string $currency
+     * @param string|null $sku
+     * @param string|null $category
+     * @param float|null $price
+     * @param int|null $quantity
+     * @param string|null $currency
      *
      * @return AnalyticsProviderInterface
+     * @throws JsonException
+     * @throws JsonException
      */
     public function ecommerceAddItem(
-        $id,
-        $name,
-        $sku = null,
-        $category = null,
-        $price = null,
-        $quantity = null,
-        $currency = null
-    ) {
+        string $id,
+        string $name,
+        string $sku = null,
+        string $category = null,
+        float  $price = null,
+        int    $quantity = null,
+        string $currency = null
+    ): AnalyticsProviderInterface
+    {
         // Call to enable ecommerce tracking automatically
         $this->enableEcommerceTracking();
 
@@ -312,8 +320,8 @@ class GoogleAnalytics implements AnalyticsProviderInterface
             $parameters['currency'] = $currency;
         }
 
-        $jsonParameters = json_encode($parameters);
-        $trackingCode = "ga('ecommerce:addItem', {$jsonParameters});";
+        $jsonParameters = json_encode($parameters, JSON_THROW_ON_ERROR);
+        $trackingCode = "ga('ecommerce:addItem', $jsonParameters);";
 
         $this->trackingBag->add($trackingCode);
 
@@ -327,7 +335,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return void
      */
-    public function trackCustom($customCode)
+    public function trackCustom(string $customCode): void
     {
         $this->trackingBag->add($customCode);
     }
@@ -337,7 +345,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return GoogleAnalytics
      */
-    public function enableDisplayFeatures()
+    public function enableDisplayFeatures(): static
     {
         $this->displayFeatures = true;
 
@@ -349,7 +357,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return GoogleAnalytics
      */
-    public function disableDisplayFeatures()
+    public function disableDisplayFeatures(): static
     {
         $this->displayFeatures = false;
 
@@ -361,7 +369,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return GoogleAnalytics
      */
-    public function enableEcommerceTracking()
+    public function enableEcommerceTracking(): static
     {
         $this->ecommerceTracking = true;
 
@@ -373,7 +381,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return GoogleAnalytics
      */
-    public function disableEcommerceTracking()
+    public function disableEcommerceTracking(): static
     {
         $this->ecommerceTracking = false;
 
@@ -385,7 +393,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return GoogleAnalytics
      */
-    public function enableAutoTracking()
+    public function enableAutoTracking(): static
     {
         $this->autoTrack = true;
 
@@ -397,7 +405,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return GoogleAnalytics
      */
-    public function disableAutoTracking()
+    public function disableAutoTracking(): static
     {
         $this->autoTrack = false;
 
@@ -407,9 +415,9 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     /**
      * render script block
      *
-     * @return \Ipunkt\LaravelAnalytics\Providers\GoogleAnalytics
+     * @return GoogleAnalytics
      */
-    public function enableScriptBlock()
+    public function enableScriptBlock(): static
     {
         $this->renderScriptBlock = true;
 
@@ -419,9 +427,9 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     /**
      * do not render script block
      *
-     * @return \Ipunkt\LaravelAnalytics\Providers\GoogleAnalytics
+     * @return GoogleAnalytics
      */
-    public function disableScriptBlock()
+    public function disableScriptBlock(): static
     {
         $this->renderScriptBlock = false;
 
@@ -433,7 +441,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         $script[] = $this->_getJavascriptTemplateBlockBegin();
 
@@ -442,9 +450,9 @@ class GoogleAnalytics implements AnalyticsProviderInterface
             : sprintf(", {'userId': '%s'}", $this->userId);
 
         if ($this->debug) {
-            $script[] = "ga('create', '{$this->trackingId}', { 'cookieDomain': 'none' }, '{$this->trackerName}'{$trackingUserId});";
+            $script[] = "ga('create', '$this->trackingId', { 'cookieDomain': 'none' }, '$this->trackerName'$trackingUserId);";
         } else {
-            $script[] = "ga('create', '{$this->trackingId}', '{$this->trackingDomain}', '{$this->trackerName}'{$trackingUserId});";
+            $script[] = "ga('create', '$this->trackingId', '$this->trackingDomain', '$this->trackerName'$trackingUserId);";
         }
 
         if ($this->ecommerceTracking) {
@@ -456,7 +464,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
         }
 
         if ($this->optimizeId) {
-            $script[] = "ga('require', '{$this->optimizeId}');";
+            $script[] = "ga('require', '$this->optimizeId');";
         }
 
         if ($this->anonymizeIp) {
@@ -499,7 +507,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return bool|$this
      */
-    public function nonInteraction($value = null)
+    public function nonInteraction(bool $value = null): bool|static
     {
         if (null === $value) {
             return $this->nonInteraction;
@@ -513,9 +521,9 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     /**
      * make the tracking measurement url insecure
      *
-     * @return \Ipunkt\LaravelAnalytics\Providers\GoogleAnalytics
+     * @return GoogleAnalytics
      */
-    public function unsecureMeasurementUrl()
+    public function unsecureMeasurementUrl(): static
     {
         $this->secureTrackingUrl = false;
 
@@ -525,9 +533,9 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     /**
      * use the secured version of the tracking measurement url
      *
-     * @return \Ipunkt\LaravelAnalytics\Providers\GoogleAnalytics
+     * @return GoogleAnalytics
      */
-    public function secureMeasurementUrl()
+    public function secureMeasurementUrl(): static
     {
         $this->secureTrackingUrl = false;
 
@@ -541,22 +549,23 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @param string $metricName
      * @param mixed $metricValue
-     * @param \Ipunkt\LaravelAnalytics\Data\Event $event
-     * @param \Ipunkt\LaravelAnalytics\Data\Campaign $campaign
+     * @param Event $event
+     * @param Campaign $campaign
      * @param string|null $clientId
      * @param array $params
      *
      * @return string
      */
     public function trackMeasurementUrl(
-        $metricName,
-        $metricValue,
-        Event $event,
+        string   $metricName,
+        mixed    $metricValue,
+        Event    $event,
         Campaign $campaign,
-        $clientId = null,
-        array $params = []
-    ) {
-        $uniqueId = ($clientId !== null) ? $clientId : uniqid('track_');
+        string   $clientId = null,
+        array    $params = []
+    ): string
+    {
+        $uniqueId = $clientId ?? uniqid('track_', true);
 
         if ($event->getLabel() === '') {
             $event->setLabel($uniqueId);
@@ -585,7 +594,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
             ],
         ];
 
-        $url = isset($params['url']) ? $params['url'] : $defaults['url'];
+        $url = $params['url'] ?? $defaults['url'];
         $url = rtrim($url, '?') . '?';
 
         if (isset($params['url'])) {
@@ -604,7 +613,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     }
 
     /**
-     * sets an user id for user tracking
+     * sets a user id for user tracking
      *
      * @param string $userId
      *
@@ -612,7 +621,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/cookies-user-id
      */
-    public function setUserId($userId)
+    public function setUserId(string $userId): AnalyticsProviderInterface
     {
         $this->userId = $userId;
 
@@ -624,7 +633,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function unsetUserId()
+    public function unsetUserId(): AnalyticsProviderInterface
     {
         return $this->setUserId(null);
     }
@@ -632,14 +641,16 @@ class GoogleAnalytics implements AnalyticsProviderInterface
     /**
      * sets custom dimensions
      *
-     * @param string|array $dimension
-     * @param null|string $value
+     * @param array|string $dimension
+     * @param string|null $value
      * @return AnalyticsProviderInterface
+     * @throws JsonException
+     * @throws JsonException
      */
-    public function setCustom($dimension, $value = null)
+    public function setCustom(array|string $dimension, string $value = null): AnalyticsProviderInterface
     {
         if ($value === null && is_array($dimension)) {
-            $params = json_encode($dimension);
+            $params = json_encode($dimension, JSON_THROW_ON_ERROR);
             $trackingCode = "ga('set', $params);";
         } else {
             $trackingCode = "ga('set', '$dimension', '$value');";
@@ -656,7 +667,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      * @param Campaign $campaign
      * @return AnalyticsProviderInterface
      */
-    public function setCampaign(Campaign $campaign)
+    public function setCampaign(Campaign $campaign): AnalyticsProviderInterface
     {
         $this->campaign = $campaign;
 
@@ -668,7 +679,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function unsetCampaign()
+    public function unsetCampaign(): AnalyticsProviderInterface
     {
         $this->campaign = null;
 
@@ -679,9 +690,9 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      * enables Content Security Polity and sets nonce
      *
      * @return AnalyticsProviderInterface
-     * @throws \Exception
+     * @throws Exception
      */
-    public function withCSP()
+    public function withCSP(): AnalyticsProviderInterface
     {
         if ($this->cspNonce === null) {
             $this->cspNonce = 'nonce-' . random_int(0, PHP_INT_MAX);
@@ -695,7 +706,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function withoutCSP()
+    public function withoutCSP(): AnalyticsProviderInterface
     {
         $this->cspNonce = null;
 
@@ -707,7 +718,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return string|null
      */
-    public function cspNonce()
+    public function cspNonce(): ?string
     {
         return $this->cspNonce;
     }
@@ -717,7 +728,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return string
      */
-    protected function _getJavascriptTemplateBlockBegin()
+    protected function _getJavascriptTemplateBlockBegin(): string
     {
         $appendix = $this->debug ? '_debug' : '';
 
@@ -726,7 +737,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
             : '<script nonce="' . $this->cspNonce . '">';
 
         return ($this->renderScriptBlock)
-            ? $scriptTag . "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics{$appendix}.js','ga');"
+            ? $scriptTag . "(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics$appendix.js','ga');"
             : '';
     }
 
@@ -735,7 +746,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return string
      */
-    protected function _getJavascriptTemplateBlockEnd()
+    protected function _getJavascriptTemplateBlockEnd(): string
     {
         return ($this->renderScriptBlock)
             ? '</script>'
@@ -749,7 +760,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setTrackingId($trackingId)
+    public function setTrackingId(string $trackingId): AnalyticsProviderInterface
     {
         $this->trackingId = $trackingId;
 
@@ -763,7 +774,7 @@ class GoogleAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setOptimizeId($optimizeId)
+    public function setOptimizeId(string $optimizeId): AnalyticsProviderInterface
     {
         $this->optimizeId = $optimizeId;
 

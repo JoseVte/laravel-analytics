@@ -14,47 +14,47 @@ class Campaign
      *
      * @var string
      */
-    private $source = 'newsletter';
+    private string $source = 'newsletter';
 
     /**
      * campaign medium
      *
      * @var string
      */
-    private $medium = 'email';
+    private string $medium = 'email';
 
     /**
      * campaign name
      *
      * @var string
      */
-    private $name;
+    private string $name;
 
     /**
      * campaign keyword
      *
      * @var string
      */
-    private $keyword;
+    private string $keyword;
 
     /**
      * campaign content
      *
      * @var string
      */
-    private $content;
+    private string $content;
 
     /**
      * campaign id
      *
      * @var string
      */
-    private $id;
+    private string $id;
 
     /**
      * @param string $name
      */
-    public function __construct($name = '')
+    public function __construct(string $name = '')
     {
         $this->name = $name;
     }
@@ -66,7 +66,7 @@ class Campaign
      *
      * @return Campaign
      */
-    public function setMedium($medium)
+    public function setMedium(string $medium): static
     {
         $this->medium = $medium;
 
@@ -76,7 +76,7 @@ class Campaign
     /**
      * @return string
      */
-    public function getMedium()
+    public function getMedium(): string
     {
         return $this->medium;
     }
@@ -88,7 +88,7 @@ class Campaign
      *
      * @return Campaign
      */
-    public function setName($name)
+    public function setName(string $name): static
     {
         $this->name = $name;
 
@@ -98,7 +98,7 @@ class Campaign
     /**
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -110,7 +110,7 @@ class Campaign
      *
      * @return Campaign
      */
-    public function setSource($source)
+    public function setSource(string $source): static
     {
         $this->source = $source;
 
@@ -120,7 +120,7 @@ class Campaign
     /**
      * @return string
      */
-    public function getSource()
+    public function getSource(): string
     {
         return $this->source;
     }
@@ -130,7 +130,7 @@ class Campaign
      *
      * @return string
      */
-    public function getKeyword()
+    public function getKeyword(): string
     {
         return $this->keyword;
     }
@@ -140,9 +140,9 @@ class Campaign
      *
      * @param string $keyword
      *
-     * @return \Ipunkt\LaravelAnalytics\Data\Campaign
+     * @return Campaign
      */
-    public function setKeyword($keyword)
+    public function setKeyword(string $keyword): static
     {
         $this->keyword = $keyword;
         return $this;
@@ -153,7 +153,7 @@ class Campaign
      *
      * @return string
      */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
@@ -163,20 +163,20 @@ class Campaign
      *
      * @param string $content
      *
-     * @return \Ipunkt\LaravelAnalytics\Data\Campaign
+     * @return Campaign
      */
-    public function setContent($content)
+    public function setContent(string $content): static
     {
         $this->content = $content;
         return $this;
     }
 
     /**
-     * returns Id
+     * Returns Id
      *
      * @return string
      */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
@@ -186,9 +186,9 @@ class Campaign
      *
      * @param string $id
      *
-     * @return \Ipunkt\LaravelAnalytics\Data\Campaign
+     * @return Campaign
      */
-    public function setId($id)
+    public function setId(string $id): static
     {
         $this->id = $id;
         return $this;

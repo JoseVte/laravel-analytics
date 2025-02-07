@@ -17,14 +17,14 @@ class TrackingBag implements TrackingBagInterface
      *
      * @var string
      */
-    private $sessionIdentifier = 'analytics.tracking';
+    private string $sessionIdentifier = 'analytics.tracking';
 
     /**
      * adds a tracking
      *
      * @param string $tracking
      */
-    public function add($tracking)
+    public function add(string $tracking): void
     {
         $sessionTracks = [];
         if (Session::has($this->sessionIdentifier)) {
@@ -43,7 +43,7 @@ class TrackingBag implements TrackingBagInterface
      *
      * @return array
      */
-    public function get()
+    public function get(): array
     {
         $trackings = [];
         if (Session::has($this->sessionIdentifier)) {

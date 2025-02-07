@@ -17,30 +17,30 @@ interface AnalyticsProviderInterface
      *
      * @return string
      */
-    public function render();
+    public function render(): string;
 
     /**
-     * track an page view
+     * track a page view
      *
-     * @param null|string $page
-     * @param null|string $title
-     * @param null|string $hittype
+     * @param string|null $page
+     * @param string|null $title
+     * @param string|null $hittype
      *
      * @return void
      */
-    public function trackPage($page, $title, $hittype);
+    public function trackPage(?string $page, ?string $title, ?string $hittype): void;
 
     /**
      * track an event
      *
      * @param string $category
      * @param string $action
-     * @param null|string $label
-     * @param null|int $value
+     * @param string|null $label
+     * @param int|null $value
      *
      * @return void
      */
-    public function trackEvent($category, $action, $label, $value);
+    public function trackEvent(string $category, string $action, ?string $label, ?int $value): void;
 
     /**
      * track any custom code
@@ -49,49 +49,49 @@ interface AnalyticsProviderInterface
      *
      * @return void
      */
-    public function trackCustom($customCode);
+    public function trackCustom(string $customCode): void;
 
     /**
      * enable display features
      *
      * @return AnalyticsProviderInterface
      */
-    public function enableDisplayFeatures();
+    public function enableDisplayFeatures(): AnalyticsProviderInterface;
 
     /**
      * disable display features
      *
      * @return AnalyticsProviderInterface
      */
-    public function disableDisplayFeatures();
+    public function disableDisplayFeatures(): AnalyticsProviderInterface;
 
     /**
      * enable auto tracking
      *
      * @return AnalyticsProviderInterface
      */
-    public function enableAutoTracking();
+    public function enableAutoTracking(): AnalyticsProviderInterface;
 
     /**
      * disable auto tracking
      *
      * @return AnalyticsProviderInterface
      */
-    public function disableAutoTracking();
+    public function disableAutoTracking(): AnalyticsProviderInterface;
 
     /**
      * render script block
      *
      * @return AnalyticsProviderInterface
      */
-    public function enableScriptBlock();
+    public function enableScriptBlock(): AnalyticsProviderInterface;
 
     /**
      * do not render script block
      *
      * @return AnalyticsProviderInterface
      */
-    public function disableScriptBlock();
+    public function disableScriptBlock(): AnalyticsProviderInterface;
 
     /**
      * assembles an url for tracking measurement without javascript
@@ -100,21 +100,21 @@ interface AnalyticsProviderInterface
      *
      * @param string $metricName
      * @param mixed $metricValue
-     * @param \Ipunkt\LaravelAnalytics\Data\Event $event
-     * @param \Ipunkt\LaravelAnalytics\Data\Campaign $campaign
+     * @param Event $event
+     * @param Campaign $campaign
      * @param string|null $clientId
      * @param array $params
      *
      * @return string
      */
     public function trackMeasurementUrl(
-        $metricName,
-        $metricValue,
-        Event $event,
+        string   $metricName,
+        mixed    $metricValue,
+        Event    $event,
         Campaign $campaign,
-        $clientId = null,
-        array $params = []
-    );
+        string   $clientId = null,
+        array    $params = []
+    ): string;
 
     /**
      * sets or gets nonInteraction
@@ -126,10 +126,10 @@ interface AnalyticsProviderInterface
      *
      * @return bool|AnalyticsProviderInterface
      */
-    public function nonInteraction($value = null);
+    public function nonInteraction(bool $value = null): bool|AnalyticsProviderInterface;
 
     /**
-     * sets an user id for user tracking
+     * sets a user id for user tracking
      *
      * @param string $userId
      *
@@ -137,14 +137,14 @@ interface AnalyticsProviderInterface
      *
      * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/cookies-user-id
      */
-    public function setUserId($userId);
+    public function setUserId(string $userId): AnalyticsProviderInterface;
 
     /**
      * unsets a possible given user id
      *
      * @return AnalyticsProviderInterface
      */
-    public function unsetUserId();
+    public function unsetUserId(): AnalyticsProviderInterface;
 
     /**
      * sets a campaign
@@ -153,81 +153,81 @@ interface AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setCampaign(Campaign $campaign);
+    public function setCampaign(Campaign $campaign): AnalyticsProviderInterface;
 
     /**
      * unsets a possible given campaign
      *
      * @return AnalyticsProviderInterface
      */
-    public function unsetCampaign();
+    public function unsetCampaign(): AnalyticsProviderInterface;
 
     /**
      * enable ecommerce tracking
      *
      * @return AnalyticsProviderInterface
      */
-    public function enableEcommerceTracking();
+    public function enableEcommerceTracking(): AnalyticsProviderInterface;
 
     /**
      * disable ecommerce tracking
      *
      * @return AnalyticsProviderInterface
      */
-    public function disableEcommerceTracking();
+    public function disableEcommerceTracking(): AnalyticsProviderInterface;
 
     /**
      * ecommerce tracking - add transaction
      *
      * @param string $id
-     * @param null|string $affiliation
-     * @param null|float $revenue
-     * @param null|float $shipping
-     * @param null|float $tax
-     * @param null|string $currency
+     * @param string|null $affiliation
+     * @param float|null $revenue
+     * @param float|null $shipping
+     * @param float|null $tax
+     * @param string|null $currency
      *
      * @return AnalyticsProviderInterface
      */
     public function ecommerceAddTransaction(
-        $id,
-        $affiliation = null,
-        $revenue = null,
-        $shipping = null,
-        $tax = null,
-        $currency = null
-    );
+        string $id,
+        string $affiliation = null,
+        float  $revenue = null,
+        float  $shipping = null,
+        float  $tax = null,
+        string $currency = null
+    ): AnalyticsProviderInterface;
 
     /**
      * ecommerce tracking - add item
      *
      * @param string $id
      * @param string $name
-     * @param null|string $sku
-     * @param null|string $category
-     * @param null|float $price
-     * @param null|int $quantity
-     * @param null|string $currency
+     * @param string|null $sku
+     * @param string|null $category
+     * @param float|null $price
+     * @param int|null $quantity
+     * @param string|null $currency
      *
      * @return AnalyticsProviderInterface
      */
     public function ecommerceAddItem(
-        $id,
-        $name,
-        $sku = null,
-        $category = null,
-        $price = null,
-        $quantity = null,
-        $currency = null
-    );
+        string $id,
+        string $name,
+        string $sku = null,
+        string $category = null,
+        float  $price = null,
+        int    $quantity = null,
+        string $currency = null
+    ): AnalyticsProviderInterface;
 
     /**
      * sets custom dimensions
      *
-     * @param string|array $dimension
-     * @param null|string $value
+     * @param array|string $dimension
+     * @param string|null $value
      * @return AnalyticsProviderInterface
      */
-    public function setCustom($dimension, $value = null);
+    public function setCustom(array|string $dimension, string $value = null): AnalyticsProviderInterface;
 
     /**
      * set a custom tracking ID (the UA-XXXXXXXX-1 code)
@@ -236,7 +236,7 @@ interface AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setTrackingId($trackingId);
+    public function setTrackingId(string $trackingId): AnalyticsProviderInterface;
 
     /**
      * set a custom optimize ID (the GTM-XXXXXX code)
@@ -245,26 +245,26 @@ interface AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setOptimizeId($optimizeId);
+    public function setOptimizeId(string $optimizeId): AnalyticsProviderInterface;
 
     /**
      * enables Content Security Polity and sets nonce
      *
      * @return AnalyticsProviderInterface
      */
-    public function withCSP();
+    public function withCSP(): AnalyticsProviderInterface;
 
     /**
      * disables Content Security Polity
      *
      * @return AnalyticsProviderInterface
      */
-    public function withoutCSP();
+    public function withoutCSP(): AnalyticsProviderInterface;
 
     /**
      * returns the current Content Security Policy nonce
      *
      * @return string|null
      */
-    public function cspNonce();
+    public function cspNonce(): ?string;
 }

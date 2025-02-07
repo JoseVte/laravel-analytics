@@ -18,21 +18,21 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         return '';
     }
 
     /**
-     * track an page view
+     * track a page view
      *
-     * @param null|string $page
-     * @param null|string $title
-     * @param null|string $hittype
+     * @param string|null $page
+     * @param string|null $title
+     * @param string|null $hittype
      *
      * @return void
      */
-    public function trackPage($page = null, $title = null, $hittype = null)
+    public function trackPage(?string $page, ?string $title, ?string $hittype): void
     {
     }
 
@@ -41,12 +41,12 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @param string $category
      * @param string $action
-     * @param null|string $label
-     * @param null|int $value
+     * @param string|null $label
+     * @param int|null $value
      *
      * @return void
      */
-    public function trackEvent($category, $action, $label = null, $value = null)
+    public function trackEvent(string $category, string $action, ?string $label, ?int $value): void
     {
     }
 
@@ -57,7 +57,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return void
      */
-    public function trackCustom($customCode)
+    public function trackCustom(string $customCode): void
     {
     }
 
@@ -66,7 +66,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return NoAnalytics
      */
-    public function enableDisplayFeatures()
+    public function enableDisplayFeatures(): static
     {
         return $this;
     }
@@ -76,7 +76,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return NoAnalytics
      */
-    public function disableDisplayFeatures()
+    public function disableDisplayFeatures(): static
     {
         return $this;
     }
@@ -86,7 +86,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return NoAnalytics
      */
-    public function enableAutoTracking()
+    public function enableAutoTracking(): static
     {
         return $this;
     }
@@ -96,7 +96,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return NoAnalytics
      */
-    public function disableAutoTracking()
+    public function disableAutoTracking(): static
     {
         return $this;
     }
@@ -106,7 +106,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return NoAnalytics
      */
-    public function enableScriptBlock()
+    public function enableScriptBlock(): static
     {
         return $this;
     }
@@ -116,7 +116,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return NoAnalytics
      */
-    public function disableScriptBlock()
+    public function disableScriptBlock(): static
     {
         return $this;
     }
@@ -128,21 +128,22 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @param string $metricName
      * @param mixed $metricValue
-     * @param \Ipunkt\LaravelAnalytics\Data\Event $event
-     * @param \Ipunkt\LaravelAnalytics\Data\Campaign $campaign
+     * @param Event $event
+     * @param Campaign $campaign
      * @param string|null $clientId
      * @param array $params
      *
      * @return string
      */
     public function trackMeasurementUrl(
-        $metricName,
-        $metricValue,
-        Event $event,
+        string   $metricName,
+        mixed    $metricValue,
+        Event    $event,
         Campaign $campaign,
-        $clientId = null,
-        array $params = []
-    ) {
+        string   $clientId = null,
+        array    $params = []
+    ): string
+    {
         return '';
     }
 
@@ -156,7 +157,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return bool|AnalyticsProviderInterface
      */
-    public function nonInteraction($value = null)
+    public function nonInteraction(bool $value = null): bool|AnalyticsProviderInterface
     {
         if (null === $value) {
             return false;
@@ -166,7 +167,7 @@ class NoAnalytics implements AnalyticsProviderInterface
     }
 
     /**
-     * sets an user id for user tracking
+     * sets a user id for user tracking
      *
      * @param string $userId
      *
@@ -174,7 +175,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @see https://developers.google.com/analytics/devguides/collection/analyticsjs/cookies-user-id
      */
-    public function setUserId($userId)
+    public function setUserId(string $userId): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -184,7 +185,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function unsetUserId()
+    public function unsetUserId(): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -192,11 +193,11 @@ class NoAnalytics implements AnalyticsProviderInterface
     /**
      * sets custom dimensions
      *
-     * @param string|array $dimension
-     * @param null|string $value
+     * @param array|string $dimension
+     * @param string|null $value
      * @return AnalyticsProviderInterface
      */
-    public function setCustom($dimension, $value = null)
+    public function setCustom(array|string $dimension, string $value = null): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -207,7 +208,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      * @param Campaign $campaign
      * @return AnalyticsProviderInterface
      */
-    public function setCampaign(Campaign $campaign)
+    public function setCampaign(Campaign $campaign): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -217,7 +218,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function unsetCampaign()
+    public function unsetCampaign(): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -227,7 +228,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function enableEcommerceTracking()
+    public function enableEcommerceTracking(): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -237,7 +238,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function disableEcommerceTracking()
+    public function disableEcommerceTracking(): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -246,22 +247,23 @@ class NoAnalytics implements AnalyticsProviderInterface
      * ecommerce tracking - add transaction
      *
      * @param string $id
-     * @param null|string $affiliation
-     * @param null|float $revenue
-     * @param null|float $shipping
-     * @param null|float $tax
-     * @param null|string $currency
+     * @param string|null $affiliation
+     * @param float|null $revenue
+     * @param float|null $shipping
+     * @param float|null $tax
+     * @param string|null $currency
      *
      * @return AnalyticsProviderInterface
      */
     public function ecommerceAddTransaction(
-        $id,
-        $affiliation = null,
-        $revenue = null,
-        $shipping = null,
-        $tax = null,
-        $currency = null
-    ) {
+        string $id,
+        string $affiliation = null,
+        float  $revenue = null,
+        float  $shipping = null,
+        float  $tax = null,
+        string $currency = null
+    ): AnalyticsProviderInterface
+    {
         return $this;
     }
 
@@ -270,23 +272,24 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @param string $id
      * @param string $name
-     * @param null|string $sku
-     * @param null|string $category
-     * @param null|float $price
-     * @param null|int $quantity
-     * @param null|string $currency
+     * @param string|null $sku
+     * @param string|null $category
+     * @param float|null $price
+     * @param int|null $quantity
+     * @param string|null $currency
      *
      * @return AnalyticsProviderInterface
      */
     public function ecommerceAddItem(
-        $id,
-        $name,
-        $sku = null,
-        $category = null,
-        $price = null,
-        $quantity = null,
-        $currency = null
-    ) {
+        string $id,
+        string $name,
+        string $sku = null,
+        string $category = null,
+        float  $price = null,
+        int    $quantity = null,
+        string $currency = null
+    ): AnalyticsProviderInterface
+    {
         return $this;
     }
 
@@ -295,7 +298,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function withCSP()
+    public function withCSP(): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -305,7 +308,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function withoutCSP()
+    public function withoutCSP(): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -315,7 +318,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return string|null
      */
-    public function cspNonce()
+    public function cspNonce(): ?string
     {
         return null;
     }
@@ -327,7 +330,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setTrackingId($trackingId)
+    public function setTrackingId(string $trackingId): AnalyticsProviderInterface
     {
         return $this;
     }
@@ -339,7 +342,7 @@ class NoAnalytics implements AnalyticsProviderInterface
      *
      * @return AnalyticsProviderInterface
      */
-    public function setOptimizeId($optimizeId)
+    public function setOptimizeId(string $optimizeId): AnalyticsProviderInterface
     {
         return $this;
     }

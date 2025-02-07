@@ -16,12 +16,12 @@ interface TrackingBagInterface
      *
      * @return void
      */
-    public function add($tracking);
+    public function add(string $tracking): void;
 
     /**
-     * returns all trackings
+     * returns all tracking
      *
      * @return array
      */
-    public function get();
+    public function get(): array;
 }

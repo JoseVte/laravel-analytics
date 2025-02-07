@@ -11,7 +11,7 @@ class CampaignRenderer implements Renderer
      *
      * @var Campaign
      */
-    private $campaign;
+    private Campaign $campaign;
 
     /**
      * CampaignRenderer constructor.
@@ -27,7 +27,7 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    public function render()
+    public function render(): string
     {
         return $this->renderName()
             . $this->renderSource()
@@ -42,11 +42,11 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    private function renderName()
+    private function renderName(): string
     {
         $name = $this->campaign->getName();
 
-        return empty($name) ? '' : "ga('set', 'campaignName', '{$name}');";
+        return empty($name) ? '' : "ga('set', 'campaignName', '$name');";
     }
 
     /**
@@ -54,11 +54,11 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    private function renderSource()
+    private function renderSource(): string
     {
         $source = $this->campaign->getSource();
 
-        return empty($source) ? '' : "ga('set', 'campaignSource', '{$source}');";
+        return empty($source) ? '' : "ga('set', 'campaignSource', '$source');";
     }
 
     /**
@@ -66,11 +66,11 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    private function renderMedium()
+    private function renderMedium(): string
     {
         $medium = $this->campaign->getMedium();
 
-        return empty($medium) ? '' : "ga('set', 'campaignMedium', '{$medium}');";
+        return empty($medium) ? '' : "ga('set', 'campaignMedium', '$medium');";
     }
 
     /**
@@ -78,11 +78,11 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    private function renderKeyword()
+    private function renderKeyword(): string
     {
         $keyword = $this->campaign->getKeyword();
 
-        return empty($keyword) ? '' : "ga('set', 'campaignKeyword', '{$keyword}');";
+        return empty($keyword) ? '' : "ga('set', 'campaignKeyword', '$keyword');";
     }
 
     /**
@@ -90,11 +90,11 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    private function renderContent()
+    private function renderContent(): string
     {
         $content = $this->campaign->getContent();
 
-        return empty($content) ? '' : "ga('set', 'campaignContent', '{$content}');";
+        return empty($content) ? '' : "ga('set', 'campaignContent', '$content');";
     }
 
     /**
@@ -102,10 +102,10 @@ class CampaignRenderer implements Renderer
      *
      * @return string
      */
-    private function renderId()
+    private function renderId(): string
     {
         $id = $this->campaign->getId();
 
-        return empty($id) ? '' : "ga('set', 'campaignId', '{$id}');";
+        return empty($id) ? '' : "ga('set', 'campaignId', '$id');";
     }
 }

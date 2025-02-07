@@ -13,5 +13,5 @@ interface Renderer
      *
      * @return string
      */
-    public function render();
+    public function render(): string;
 }

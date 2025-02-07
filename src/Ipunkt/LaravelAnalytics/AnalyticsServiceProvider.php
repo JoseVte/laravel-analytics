@@ -4,6 +4,7 @@ namespace Ipunkt\LaravelAnalytics;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
+use Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
 
 class AnalyticsServiceProvider extends ServiceProvider
 {
@@ -12,16 +13,16 @@ class AnalyticsServiceProvider extends ServiceProvider
      *
      * @var bool
      */
-    protected $defer = false;
+    protected bool $defer = false;
 
     /**
      * Bootstrap the application events.
      *
      * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        $config = realpath(__DIR__ . '/../../config/analytics.php');
+        $config = dirname(__DIR__, 2) . '/config/analytics.php';
 
         $this->mergeConfigFrom($config, 'analytics');
 
@@ -35,9 +36,9 @@ class AnalyticsServiceProvider extends ServiceProvider
      *
      * @return void
      */
-    public function register()
+    public function register(): void
     {
-        $this->app->singleton('Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface',
+        $this->app->singleton(AnalyticsProviderInterface::class,
             function () {
                 // get analytics provider name
                 $provider = Config::get('analytics.provider');
@@ -68,7 +69,7 @@ class AnalyticsServiceProvider extends ServiceProvider
      *
      * @return array
      */
-    public function provides()
+    public function provides(): array
     {
         return [];
     }

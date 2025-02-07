@@ -14,28 +14,28 @@ class Event
      *
      * @var string
      */
-    private $category = 'email';
+    private string $category = 'email';
 
     /**
      * event action
      *
      * @var string
      */
-    private $action = 'open';
+    private string $action = 'open';
 
     /**
      * event label
      *
      * @var string
      */
-    private $label;
+    private string $label;
 
     /**
      * hit type
      *
      * @var string
      */
-    private $hitType = 'event';
+    private string $hitType = 'event';
 
     /**
      * set action
@@ -44,7 +44,7 @@ class Event
      *
      * @return Event
      */
-    public function setAction($action)
+    public function setAction(string $action): static
     {
         $this->action = $action;
 
@@ -56,7 +56,7 @@ class Event
      *
      * @return string
      */
-    public function getAction()
+    public function getAction(): string
     {
         return $this->action;
     }
@@ -68,7 +68,7 @@ class Event
      *
      * @return Event
      */
-    public function setCategory($category)
+    public function setCategory(string $category): static
     {
         $this->category = $category;
 
@@ -80,7 +80,7 @@ class Event
      *
      * @return string
      */
-    public function getCategory()
+    public function getCategory(): string
     {
         return $this->category;
     }
@@ -92,7 +92,7 @@ class Event
      *
      * @return Event
      */
-    public function setHitType($hitType)
+    public function setHitType(string $hitType): static
     {
         $this->hitType = $hitType;
 
@@ -104,7 +104,7 @@ class Event
      *
      * @return string
      */
-    public function getHitType()
+    public function getHitType(): string
     {
         return $this->hitType;
     }
@@ -116,7 +116,7 @@ class Event
      *
      * @return Event
      */
-    public function setLabel($label)
+    public function setLabel(string $label): static
     {
         $this->label = $label;
 
@@ -128,7 +128,7 @@ class Event
      *
      * @return string
      */
-    public function getLabel()
+    public function getLabel(): string
     {
         return $this->label;
     }
