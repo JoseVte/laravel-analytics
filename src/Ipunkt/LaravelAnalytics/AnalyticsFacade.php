@@ -1,14 +1,14 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics;
+namespace Josrom\LaravelAnalytics;
 
 use Illuminate\Support\Facades\Facade;
-use Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
+use Josrom\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
 
 /**
  * Class AnalyticsFacade
  *
- * @package Ipunkt\LaravelAnalytics
+ * @package Josrom\LaravelAnalytics
  */
 class AnalyticsFacade extends Facade
 {

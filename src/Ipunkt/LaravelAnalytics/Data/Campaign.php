@@ -1,11 +1,11 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Data;
+namespace Josrom\LaravelAnalytics\Data;
 
 /**
  * Class Campaign
  *
- * @package Ipunkt\LaravelAnalytics\Data
+ * @package Josrom\LaravelAnalytics\Data
  */
 class Campaign
 {

@@ -1,21 +1,21 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Providers;
+namespace Josrom\LaravelAnalytics\Providers;
 
 use Exception;
 use Illuminate\Support\Arr;
 use InvalidArgumentException;
-use Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
-use Ipunkt\LaravelAnalytics\Data\Campaign;
-use Ipunkt\LaravelAnalytics\Data\Event;
-use Ipunkt\LaravelAnalytics\Data\Renderer\CampaignRenderer;
-use Ipunkt\LaravelAnalytics\TrackingBag;
+use Josrom\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
+use Josrom\LaravelAnalytics\Data\Campaign;
+use Josrom\LaravelAnalytics\Data\Event;
+use Josrom\LaravelAnalytics\Data\Renderer\CampaignRenderer;
+use Josrom\LaravelAnalytics\TrackingBag;
 use JsonException;
 
 /**
  * Class GoogleAnalytics
  *
- * @package Ipunkt\LaravelAnalytics\Providers
+ * @package Josrom\LaravelAnalytics\Providers
  */
 class GoogleAnalytics implements AnalyticsProviderInterface
 {

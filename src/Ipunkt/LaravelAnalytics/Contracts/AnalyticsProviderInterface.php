@@ -1,14 +1,14 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Contracts;
+namespace Josrom\LaravelAnalytics\Contracts;
 
-use Ipunkt\LaravelAnalytics\Data\Campaign;
-use Ipunkt\LaravelAnalytics\Data\Event;
+use Josrom\LaravelAnalytics\Data\Campaign;
+use Josrom\LaravelAnalytics\Data\Event;
 
 /**
  * Interface AnalyticsProviderInterface
  *
- * @package Ipunkt\LaravelAnalytics\Contracts
+ * @package Josrom\LaravelAnalytics\Contracts
  */
 interface AnalyticsProviderInterface
 {

@@ -1,14 +1,14 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics;
+namespace Josrom\LaravelAnalytics;
 
 use Illuminate\Support\Facades\Session;
-use Ipunkt\LaravelAnalytics\Contracts\TrackingBagInterface;
+use Josrom\LaravelAnalytics\Contracts\TrackingBagInterface;
 
 /**
  * Class TrackingBag
  *
- * @package Ipunkt\LaravelAnalytics
+ * @package Josrom\LaravelAnalytics
  */
 class TrackingBag implements TrackingBagInterface
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Data\Renderer;
+namespace Josrom\LaravelAnalytics\Data\Renderer;
 
 /**
  * Interface Renderer
- * @package Ipunkt\LaravelAnalytics\Data\Renderer
+ * @package Josrom\LaravelAnalytics\Data\Renderer
  */
 interface Renderer
 {

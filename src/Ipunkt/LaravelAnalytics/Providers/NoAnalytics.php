@@ -1,15 +1,15 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Providers;
+namespace Josrom\LaravelAnalytics\Providers;
 
-use Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
-use Ipunkt\LaravelAnalytics\Data\Campaign;
-use Ipunkt\LaravelAnalytics\Data\Event;
+use Josrom\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
+use Josrom\LaravelAnalytics\Data\Campaign;
+use Josrom\LaravelAnalytics\Data\Event;
 
 /**
  * Class NoAnalytics
  *
- * @package Ipunkt\LaravelAnalytics\Providers
+ * @package Josrom\LaravelAnalytics\Providers
  */
 class NoAnalytics implements AnalyticsProviderInterface
 {

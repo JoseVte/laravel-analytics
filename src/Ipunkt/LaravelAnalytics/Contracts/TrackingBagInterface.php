@@ -1,11 +1,11 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Contracts;
+namespace Josrom\LaravelAnalytics\Contracts;
 
 /**
  * Interface TrackingBagInterface
  *
- * @package Ipunkt\LaravelAnalytics\Contracts
+ * @package Josrom\LaravelAnalytics\Contracts
  */
 interface TrackingBagInterface
 {

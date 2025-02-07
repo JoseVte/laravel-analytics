@@ -1,10 +1,10 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics;
+namespace Josrom\LaravelAnalytics;
 
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\ServiceProvider;
-use Ipunkt\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
+use Josrom\LaravelAnalytics\Contracts\AnalyticsProviderInterface;
 
 class AnalyticsServiceProvider extends ServiceProvider
 {
@@ -44,7 +44,7 @@ class AnalyticsServiceProvider extends ServiceProvider
                 $provider = Config::get('analytics.provider');
 
                 // make it a class
-                $providerClass = 'Ipunkt\LaravelAnalytics\Providers\\' . $provider;
+                $providerClass = 'Josrom\LaravelAnalytics\Providers\\' . $provider;
 
                 // getting the config
                 $providerConfig = [];

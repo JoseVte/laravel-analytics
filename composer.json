@@ -32,7 +32,7 @@
     },
     "autoload": {
         "psr-0": {
-            "Ipunkt\\LaravelAnalytics\\": "src/"
+            "Josrom\\LaravelAnalytics\\": "src/"
         }
     },
     "minimum-stability": "stable",
@@ -46,10 +46,10 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Ipunkt\\LaravelAnalytics\\AnalyticsServiceProvider"
+                "Josrom\\LaravelAnalytics\\AnalyticsServiceProvider"
             ],
             "aliases": {
-                "Analytics": "Ipunkt\\LaravelAnalytics\\AnalyticsFacade"
+                "Analytics": "Josrom\\LaravelAnalytics\\AnalyticsFacade"
             }
         }
     }

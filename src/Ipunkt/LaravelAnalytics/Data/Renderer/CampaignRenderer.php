@@ -1,8 +1,8 @@
 <?php
 
-namespace Ipunkt\LaravelAnalytics\Data\Renderer;
+namespace Josrom\LaravelAnalytics\Data\Renderer;
 
-use Ipunkt\LaravelAnalytics\Data\Campaign;
+use Josrom\LaravelAnalytics\Data\Campaign;
 
 class CampaignRenderer implements Renderer
 {
